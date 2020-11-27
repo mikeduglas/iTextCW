@@ -26,6 +26,6 @@ sap   LIKE(TPdfSigAppearanceGrp)
 ```
 - Declare a string to receive an error message.
 - Set necessary sap fields.
-- Call pdfSign.SignPDF() method, passing input and output pdf file names, PKCS #12 file name, a password, signature appearance, and append flag.  
+- Call pdfSign.SignPDF() method, passing input and output pdf file names, PKCS #12 file name, a password, signature appearance group, and append flag.  
 
 Note: The certificate must be created with exported private key.
