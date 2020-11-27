@@ -28,4 +28,4 @@ sap   LIKE(TPdfSigAppearanceGrp)
 - Set necessary sap fields.
 - Call pdfSign.SignPDF() method, passing input and output pdf file names, PKCS #12 file name, a password, signature appearance, and append flag.  
 
-Note: The certificate must be created with expored private key.
+Note: The certificate must be created with exported private key.
