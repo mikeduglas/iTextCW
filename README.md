@@ -8,8 +8,9 @@ The project enables some [iTextSharp](https://github.com/itext/itextsharp) funct
 - Place bin/*.dll files into your project folder.
 
 ### How to Merge PDF files.
+See \examples\PDFMergeTest.clw  for details.
+
 - Include 'iTextCW.inc'.
 - Declare a variable of type TITextCW.
-- Call MergePDF method.
-See \examples\PDFMergeTest.clw.
+- Call MergePDF method.  
 
