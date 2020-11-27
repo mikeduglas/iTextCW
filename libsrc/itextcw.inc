@@ -14,11 +14,19 @@ LocationCaption                 STRING(64)
 Location                        STRING(64)
 ReasonCaption                   STRING(64)
 Reason                          STRING(64)
+Visible                         BOOL
+!- fields below work only for Visible = true
+LLX                             LONG     !- lower left x
+LLY                             LONG     !- lower left y
+URX                             LONG     !- upper right x
+URY                             LONG     !- upper right y
+PageNum                         LONG
+FieldName                       STRING(64)
 ImageFile                       STRING(256)
                               END
 
 TITextCW                      CLASS, TYPE, MODULE('itextcw.clw'), LINK('itextcw.clw')
 MergePDF                        PROCEDURE(STRING inFile1, STRING inFile2, STRING outFile), BOOL, PROC
 MergePDF                        PROCEDURE(STRING inFile1, STRING inFile2, STRING inFile3, STRING outFile), BOOL, PROC
-SignPDF                         PROCEDURE(STRING inputPDF, STRING outputPDF, STRING certFile, STRING certPassword, TPdfSigAppearanceGrp pAppearance, BOOL pAppend, BOOL pVisible, *STRING pErrMsg), BOOL
+SignPDF                         PROCEDURE(STRING inputPDF, STRING outputPDF, STRING certFile, STRING certPassword, TPdfSigAppearanceGrp pAppearance, BOOL pAppend, *STRING pErrMsg), BOOL
                               END

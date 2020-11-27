@@ -9,6 +9,11 @@
 
 _PdfSigAppearanceGrp          GROUP, TYPE
 SignatureRenderingMode          LONG
+LLX                             LONG    !- lower left x
+LLY                             LONG    !- lower left y
+URX                             LONG    !- upper right x
+URY                             LONG    !- upper right y
+PageNum                         LONG
 l_SignatureCreator              LONG
 SignatureCreator                BSTRING, OVER(l_SignatureCreator)
 l_Contact                       LONG
@@ -21,15 +26,18 @@ l_ReasonCaption                 LONG
 ReasonCaption                   BSTRING, OVER(l_ReasonCaption)
 l_Reason                        LONG
 Reason                          BSTRING, OVER(l_Reason)
+l_FieldName                     LONG
+FieldName                       BSTRING, OVER(l_FieldName)
 l_ImageFile                     LONG
 ImageFile                       BSTRING, OVER(l_ImageFile)
+Visible                         BYTE
                               END
 
   MAP
     MODULE('iTextCW prototypes')
       MergePDF2(BSTRING inFile1, BSTRING inFile2, BSTRING outFile), PASCAL, DLL(1)
       MergePDF3(BSTRING inFile1, BSTRING inFile2, BSTRING inFile3, BSTRING outFile), PASCAL, DLL(1)
-      SignPDF(BSTRING inputPDF, BSTRING outputPDF, BSTRING certFile, BSTRING certPassword, LONG pAppearance, BYTE pAppend, BYTE pVisible, *BSTRING pErrMsg), BYTE, PASCAL, DLL(1)
+      SignPDF(BSTRING inputPDF, BSTRING outputPDF, BSTRING certFile, BSTRING certPassword, LONG pAppearance, BYTE pAppend, *BSTRING pErrMsg), BYTE, PASCAL, DLL(1)
     END
   END
 
@@ -51,7 +59,7 @@ TITextCW.MergePDF             PROCEDURE(STRING inFile1, STRING inFile2,  STRING 
   MergePDF3(LONGPATH(inFile1), LONGPATH(inFile2), LONGPATH(inFile3), LONGPATH(outFile))
   RETURN TRUE
 
-TITextCW.SignPDF              PROCEDURE(STRING inputPDF, STRING outputPDF, STRING certFile, STRING certPassword, TPdfSigAppearanceGrp pAppearance, BOOL pAppend, BOOL pVisible, *STRING pErrMsg)
+TITextCW.SignPDF              PROCEDURE(STRING inputPDF, STRING outputPDF, STRING certFile, STRING certPassword, TPdfSigAppearanceGrp pAppearance, BOOL pAppend, *STRING pErrMsg)
 grp                             LIKE(_PdfSigAppearanceGrp)
 bsErrMsg                        BSTRING
   CODE
@@ -70,7 +78,21 @@ bsErrMsg                        BSTRING
     grp.ImageFile = LONGPATH(pAppearance.ImageFile)
   END
   
-  IF SignPDF(LONGPATH(inputPDF), LONGPATH(outputPDF), LONGPATH(certFile), CLIP(certPassword), ADDRESS(grp), pAppend, pVisible, bsErrMsg)
+  grp.Visible = pAppearance.Visible
+  grp.LLX = pAppearance.LLX
+  grp.LLY = pAppearance.LLY
+  grp.URX = pAppearance.URX
+  grp.URY = pAppearance.URY
+  grp.PageNum = pAppearance.PageNum
+  IF pAppearance.FieldName
+    grp.FieldName = pAppearance.FieldName
+  END
+  
+  IF grp.Visible AND grp.PageNum = 0
+    grp.PageNum = 1
+  END
+  
+  IF SignPDF(LONGPATH(inputPDF), LONGPATH(outputPDF), LONGPATH(certFile), CLIP(certPassword), ADDRESS(grp), pAppend, bsErrMsg)
     RETURN TRUE
   ELSE
     pErrMsg = bsErrMsg
