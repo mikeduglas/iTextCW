@@ -4,10 +4,12 @@ The project enables some [iTextSharp](https://github.com/itext/itextsharp) funct
 
 ### Installation.
 - Download ZIP.
+- Place libsrc/*.inc,*.clw files into %Clarion%/Accessory/libsrc/win folder.
+- Place bin/*.dll files into your project folder.
 
-### Usage.
-1. Merge PDF files.
+### How to Merge PDF files.
 - Include 'iTextCW.inc'.
 - Declare a variable of type TITextCW.
 - Call MergePDF method.
+See \examples\PDFMergeTest.clw.
 
