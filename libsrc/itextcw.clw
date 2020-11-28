@@ -35,9 +35,9 @@ Visible                         BYTE
 
   MAP
     MODULE('iTextCW prototypes')
-      MergePDF2(BSTRING inFile1, BSTRING inFile2, BSTRING outFile), PASCAL, DLL(1)
-      MergePDF3(BSTRING inFile1, BSTRING inFile2, BSTRING inFile3, BSTRING outFile), PASCAL, DLL(1)
-      SignPDF(BSTRING inputPDF, BSTRING outputPDF, BSTRING certFile, BSTRING certPassword, LONG pAppearance, BYTE pAppend, *BSTRING pErrMsg), BYTE, PASCAL, DLL(1)
+      MergePDF2(BSTRING inFile1, BSTRING inFile2, BSTRING outFile), PASCAL, DLL(1), NAME('iTextCW_MergePDF2')
+      MergePDF3(BSTRING inFile1, BSTRING inFile2, BSTRING inFile3, BSTRING outFile), PASCAL, DLL(1), NAME('iTextCW_MergePDF3')
+      SignPDF(BSTRING inputPDF, BSTRING outputPDF, BSTRING certFile, BSTRING certPassword, LONG pAppearance, BYTE pAppend, *BSTRING pErrMsg), BYTE, PASCAL, DLL(1), NAME('iTextCW_SignPDF')
     END
   END
 
