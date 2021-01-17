@@ -28,5 +28,6 @@ ImageFile                       STRING(256)
 TITextCW                      CLASS, TYPE, MODULE('itextcw.clw'), LINK('itextcw.clw')
 MergePDF                        PROCEDURE(STRING inFile1, STRING inFile2, STRING outFile), BOOL, PROC
 MergePDF                        PROCEDURE(STRING inFile1, STRING inFile2, STRING inFile3, STRING outFile), BOOL, PROC
+MergePDF                        PROCEDURE(STRING inFile1, STRING inFile2, STRING inFile3, STRING inFile4, STRING outFile), BOOL, PROC
 SignPDF                         PROCEDURE(STRING inputPDF, STRING outputPDF, STRING certFile, STRING certPassword, TPdfSigAppearanceGrp pAppearance, BOOL pAppend, *STRING pErrMsg), BOOL
                               END

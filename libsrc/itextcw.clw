@@ -37,6 +37,7 @@ Visible                         BYTE
     MODULE('iTextCW prototypes')
       MergePDF2(BSTRING inFile1, BSTRING inFile2, BSTRING outFile), PASCAL, DLL(1), NAME('iTextCW_MergePDF2')
       MergePDF3(BSTRING inFile1, BSTRING inFile2, BSTRING inFile3, BSTRING outFile), PASCAL, DLL(1), NAME('iTextCW_MergePDF3')
+      MergePDF4(BSTRING inFile1, BSTRING inFile2, BSTRING inFile3, BSTRING inFile4, BSTRING outFile), PASCAL, DLL(1), NAME('iTextCW_MergePDF4')
       SignPDF(BSTRING inputPDF, BSTRING outputPDF, BSTRING certFile, BSTRING certPassword, LONG pAppearance, BYTE pAppend, *BSTRING pErrMsg), BYTE, PASCAL, DLL(1), NAME('iTextCW_SignPDF')
     END
   END
@@ -50,13 +51,22 @@ TITextCW.MergePDF             PROCEDURE(STRING inFile1, STRING inFile2, STRING o
   MergePDF2(LONGPATH(inFile1), LONGPATH(inFile2), LONGPATH(outFile))
   RETURN TRUE
   
-TITextCW.MergePDF             PROCEDURE(STRING inFile1, STRING inFile2,  STRING inFile3, STRING outFile)
+TITextCW.MergePDF             PROCEDURE(STRING inFile1, STRING inFile2, STRING inFile3, STRING outFile)
   CODE
   IF NOT EXISTS(inFile1) OR NOT EXISTS(inFile2) OR NOT EXISTS(inFile3)
     RETURN FALSE
   END
   
   MergePDF3(LONGPATH(inFile1), LONGPATH(inFile2), LONGPATH(inFile3), LONGPATH(outFile))
+  RETURN TRUE
+  
+TITextCW.MergePDF             PROCEDURE(STRING inFile1, STRING inFile2, STRING inFile3, STRING inFile4, STRING outFile)
+  CODE
+  IF NOT EXISTS(inFile1) OR NOT EXISTS(inFile2) OR NOT EXISTS(inFile3) OR NOT EXISTS(inFile4)
+    RETURN FALSE
+  END
+  
+  MergePDF4(LONGPATH(inFile1), LONGPATH(inFile2), LONGPATH(inFile3), LONGPATH(inFile4), LONGPATH(outFile))
   RETURN TRUE
 
 TITextCW.SignPDF              PROCEDURE(STRING inputPDF, STRING outputPDF, STRING certFile, STRING certPassword, TPdfSigAppearanceGrp pAppearance, BOOL pAppend, *STRING pErrMsg)
