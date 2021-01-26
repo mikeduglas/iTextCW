@@ -1,0 +1,5 @@
+v1.0.0.2 26.01.2021
+- removed .NET 4.0 dependencies, now only .NET 2.0 is required.
+
+v1.0.0.1 17.01.2021
+- added MergePDF accepted 4 input files.

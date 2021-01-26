@@ -2,6 +2,10 @@
 
 The project enables some [iTextSharp](https://github.com/itext/itextsharp) functionality to Clarion.
 
+### Requirements.
+- .NET 2.0
+- Clarion 6.3 and higher
+
 ### Installation.
 - Download ZIP.
 - Place libsrc/*.inc,*.clw files into %Clarion%/accessory/libsrc/win folder.
