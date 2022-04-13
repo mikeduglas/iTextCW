@@ -1,3 +1,6 @@
+v1.0.0.3 13.04.2022
+- fixed the bug with single page documents.
+
 v1.0.0.2 26.01.2021
 - removed .NET 4.0 dependencies, now only .NET 2.0 is required.
 
