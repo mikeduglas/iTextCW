@@ -1,5 +1,5 @@
 !** iTextSharp for Clarion
-!** mikeduglas@yandex.ru 2020
+!** mikeduglas@yandex.ru 2022
 
 SigRenderingModeEnum          EQUATE(LONG)
 SigRenderingMode::DESCRIPTION EQUATE(0)
@@ -30,4 +30,17 @@ MergePDF                        PROCEDURE(STRING inFile1, STRING inFile2, STRING
 MergePDF                        PROCEDURE(STRING inFile1, STRING inFile2, STRING inFile3, STRING outFile), BOOL, PROC
 MergePDF                        PROCEDURE(STRING inFile1, STRING inFile2, STRING inFile3, STRING inFile4, STRING outFile), BOOL, PROC
 SignPDF                         PROCEDURE(STRING inputPDF, STRING outputPDF, STRING certFile, STRING certPassword, TPdfSigAppearanceGrp pAppearance, BOOL pAppend, *STRING pErrMsg), BOOL
+
+!!!<summary>Rotate all pages.</summary>
+!!!<param name="inFile">Input file.</param>
+!!!<param name="outFile">Output file.</param>
+!!!<param name="pRotation">Rotation value: 0, 90, 180, 270.</param>
+RotatePDF                       PROCEDURE(STRING inFile, STRING outFile, LONG pRotation), BOOL, PROC
+!!!<summary>Rotate the pages.</summary>
+!!!<param name="inFile">Input file.</param>
+!!!<param name="outFile">Output file.</param>
+!!!<param name="pRotation">Rotation value: 0, 90, 180, 270.</param>
+!!!<param name="pPreferredOrientationIsPortrait">true if preferred orientation is Portrait, otherwise Landscape.</param>
+!!!<remarks>If the page is already in preferred orientation, then it will not be rotated.</remarks>
+RotatePDF                       PROCEDURE(STRING inFile, STRING outFile, LONG pRotation, BOOL pPreferredOrientationIsPortrait), BOOL, PROC
                               END

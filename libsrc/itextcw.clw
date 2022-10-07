@@ -1,5 +1,5 @@
 !** iTextSharp for Clarion
-!** mikeduglas@yandex.ru 2020
+!** mikeduglas@yandex.ru 2022
 
   MEMBER
 
@@ -35,10 +35,12 @@ Visible                         BYTE
 
   MAP
     MODULE('iTextCW prototypes')
-      MergePDF2(BSTRING inFile1, BSTRING inFile2, BSTRING outFile), PASCAL, DLL(1), NAME('iTextCW_MergePDF2')
-      MergePDF3(BSTRING inFile1, BSTRING inFile2, BSTRING inFile3, BSTRING outFile), PASCAL, DLL(1), NAME('iTextCW_MergePDF3')
-      MergePDF4(BSTRING inFile1, BSTRING inFile2, BSTRING inFile3, BSTRING inFile4, BSTRING outFile), PASCAL, DLL(1), NAME('iTextCW_MergePDF4')
+      MergePDF2(BSTRING inFile1, BSTRING inFile2, BSTRING outFile), BYTE, PASCAL, DLL(1), NAME('iTextCW_MergePDF2')
+      MergePDF3(BSTRING inFile1, BSTRING inFile2, BSTRING inFile3, BSTRING outFile), BYTE, PASCAL, DLL(1), NAME('iTextCW_MergePDF3')
+      MergePDF4(BSTRING inFile1, BSTRING inFile2, BSTRING inFile3, BSTRING inFile4, BSTRING outFile), BYTE, PASCAL, DLL(1), NAME('iTextCW_MergePDF4')
       SignPDF(BSTRING inputPDF, BSTRING outputPDF, BSTRING certFile, BSTRING certPassword, LONG pAppearance, BYTE pAppend, *BSTRING pErrMsg), BYTE, PASCAL, DLL(1), NAME('iTextCW_SignPDF')
+      RotatePDF(BSTRING inputPDF, BSTRING outputPDF, LONG pRotation), BYTE, PASCAL, DLL(1), NAME('iTextCW_RotatePDF')
+      RotatePDFIfNeeded(BSTRING inputPDF, BSTRING outputPDF, LONG pRotation, BYTE pPreferredOrientationIsPortrait), BYTE, PASCAL, DLL(1), NAME('iTextCW_RotatePDFIfNeeded')
     END
   END
 
@@ -48,8 +50,7 @@ TITextCW.MergePDF             PROCEDURE(STRING inFile1, STRING inFile2, STRING o
     RETURN FALSE
   END
   
-  MergePDF2(LONGPATH(inFile1), LONGPATH(inFile2), LONGPATH(outFile))
-  RETURN TRUE
+  RETURN MergePDF2(LONGPATH(inFile1), LONGPATH(inFile2), LONGPATH(outFile))
   
 TITextCW.MergePDF             PROCEDURE(STRING inFile1, STRING inFile2, STRING inFile3, STRING outFile)
   CODE
@@ -57,8 +58,7 @@ TITextCW.MergePDF             PROCEDURE(STRING inFile1, STRING inFile2, STRING i
     RETURN FALSE
   END
   
-  MergePDF3(LONGPATH(inFile1), LONGPATH(inFile2), LONGPATH(inFile3), LONGPATH(outFile))
-  RETURN TRUE
+  RETURN MergePDF3(LONGPATH(inFile1), LONGPATH(inFile2), LONGPATH(inFile3), LONGPATH(outFile))
   
 TITextCW.MergePDF             PROCEDURE(STRING inFile1, STRING inFile2, STRING inFile3, STRING inFile4, STRING outFile)
   CODE
@@ -66,8 +66,7 @@ TITextCW.MergePDF             PROCEDURE(STRING inFile1, STRING inFile2, STRING i
     RETURN FALSE
   END
   
-  MergePDF4(LONGPATH(inFile1), LONGPATH(inFile2), LONGPATH(inFile3), LONGPATH(inFile4), LONGPATH(outFile))
-  RETURN TRUE
+  RETURN MergePDF4(LONGPATH(inFile1), LONGPATH(inFile2), LONGPATH(inFile3), LONGPATH(inFile4), LONGPATH(outFile))
 
 TITextCW.SignPDF              PROCEDURE(STRING inputPDF, STRING outputPDF, STRING certFile, STRING certPassword, TPdfSigAppearanceGrp pAppearance, BOOL pAppend, *STRING pErrMsg)
 grp                             LIKE(_PdfSigAppearanceGrp)
@@ -108,3 +107,19 @@ bsErrMsg                        BSTRING
     pErrMsg = bsErrMsg
     RETURN FALSE
   END
+
+TITextCW.RotatePDF            PROCEDURE(STRING inFile, STRING outFile, LONG pRotation)
+  CODE
+  IF NOT EXISTS(inFile)
+    RETURN FALSE
+  END
+  
+  RETURN RotatePDF(LONGPATH(inFile), LONGPATH(outFile), pRotation)
+
+TITextCW.RotatePDF            PROCEDURE(STRING inFile, STRING outFile, LONG pRotation, BOOL pPreferredOrientationIsPortrait)
+  CODE
+  IF NOT EXISTS(inFile)
+    RETURN FALSE
+  END
+  
+  RETURN RotatePDFIfNeeded(LONGPATH(inFile), LONGPATH(outFile), pRotation, pPreferredOrientationIsPortrait)
