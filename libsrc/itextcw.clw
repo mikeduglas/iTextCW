@@ -1,4 +1,5 @@
 !** iTextSharp for Clarion
+!** v1.0.0.5
 !** mikeduglas@yandex.ru 2022
 
   MEMBER
@@ -35,46 +36,77 @@ Visible                         BYTE
 
   MAP
     MODULE('iTextCW prototypes')
-      MergePDF2(BSTRING inFile1, BSTRING inFile2, BSTRING outFile), BYTE, PASCAL, DLL(1), NAME('iTextCW_MergePDF2')
-      MergePDF3(BSTRING inFile1, BSTRING inFile2, BSTRING inFile3, BSTRING outFile), BYTE, PASCAL, DLL(1), NAME('iTextCW_MergePDF3')
-      MergePDF4(BSTRING inFile1, BSTRING inFile2, BSTRING inFile3, BSTRING inFile4, BSTRING outFile), BYTE, PASCAL, DLL(1), NAME('iTextCW_MergePDF4')
-      SignPDF(BSTRING inputPDF, BSTRING outputPDF, BSTRING certFile, BSTRING certPassword, LONG pAppearance, BYTE pAppend, *BSTRING pErrMsg), BYTE, PASCAL, DLL(1), NAME('iTextCW_SignPDF')
-      RotatePDF(BSTRING inputPDF, BSTRING outputPDF, LONG pRotation), BYTE, PASCAL, DLL(1), NAME('iTextCW_RotatePDF')
-      RotatePDFIfNeeded(BSTRING inputPDF, BSTRING outputPDF, LONG pRotation, BYTE pPreferredOrientationIsPortrait), BYTE, PASCAL, DLL(1), NAME('iTextCW_RotatePDFIfNeeded')
+      MergePDFArray(LONG inFiles, LONG pCount, LONG pStrSize, LONG outFile), BYTE, PASCAL, DLL(1), NAME('iTextCW_MergePDFArray')
+      SignPDF(LONG inputPDF, LONG outputPDF, LONG certFile, LONG certPassword, LONG pAppearance, BYTE pAppend, LONG pErrMsg, LONG pSize), BYTE, PASCAL, DLL(1), NAME('iTextCW_SignPDF')
+      RotatePDF(LONG inputPDF, LONG outputPDF, LONG pRotation), BYTE, PASCAL, DLL(1), NAME('iTextCW_RotatePDF')
+      RotatePDFIfNeeded(LONG inputPDF, LONG outputPDF, LONG pRotation, BYTE pPreferredOrientationIsPortrait), BYTE, PASCAL, DLL(1), NAME('iTextCW_RotatePDFIfNeeded')
     END
   END
 
-TITextCW.MergePDF             PROCEDURE(STRING inFile1, STRING inFile2, STRING outFile)
-  CODE
-  IF NOT EXISTS(inFile1) OR NOT EXISTS(inFile2)
-    RETURN FALSE
-  END
-  
-  RETURN MergePDF2(LONGPATH(inFile1), LONGPATH(inFile2), LONGPATH(outFile))
-  
-TITextCW.MergePDF             PROCEDURE(STRING inFile1, STRING inFile2, STRING inFile3, STRING outFile)
-  CODE
-  IF NOT EXISTS(inFile1) OR NOT EXISTS(inFile2) OR NOT EXISTS(inFile3)
-    RETURN FALSE
-  END
-  
-  RETURN MergePDF3(LONGPATH(inFile1), LONGPATH(inFile2), LONGPATH(inFile3), LONGPATH(outFile))
-  
-TITextCW.MergePDF             PROCEDURE(STRING inFile1, STRING inFile2, STRING inFile3, STRING inFile4, STRING outFile)
-  CODE
-  IF NOT EXISTS(inFile1) OR NOT EXISTS(inFile2) OR NOT EXISTS(inFile3) OR NOT EXISTS(inFile4)
-    RETURN FALSE
-  END
-  
-  RETURN MergePDF4(LONGPATH(inFile1), LONGPATH(inFile2), LONGPATH(inFile3), LONGPATH(inFile4), LONGPATH(outFile))
+typInPdfFiles                 QUEUE, TYPE
+name                            STRING(FILE:MaxFilePath)
+                              END
 
-TITextCW.SignPDF              PROCEDURE(STRING inputPDF, STRING outputPDF, STRING certFile, STRING certPassword, TPdfSigAppearanceGrp pAppearance, BOOL pAppend, *STRING pErrMsg)
-grp                             LIKE(_PdfSigAppearanceGrp)
-bsErrMsg                        BSTRING
+
+TITextCW.MergePDF             PROCEDURE(STRING pInFile1, STRING pInFile2, STRING pOutFile)
+inFiles                         QUEUE(typInPdfFiles).
   CODE
-  IF NOT EXISTS(inputPDF) OR NOT EXISTS(certFile)
-    RETURN FALSE
+  inFiles.name = CLIP(pInFile1); ADD(inFiles)
+  inFiles.name = CLIP(pInFile2); ADD(inFiles)
+  RETURN SELF.MergePDF(inFiles, 1, pOutFile)
+  
+TITextCW.MergePDF             PROCEDURE(STRING pInFile1, STRING pInFile2, STRING pInFile3, STRING pOutFile)
+inFiles                         QUEUE(typInPdfFiles).
+  CODE
+  inFiles.name = CLIP(pInFile1); ADD(inFiles)
+  inFiles.name = CLIP(pInFile2); ADD(inFiles)
+  inFiles.name = CLIP(pInFile3); ADD(inFiles)
+  RETURN SELF.MergePDF(inFiles, 1, pOutFile)
+  
+TITextCW.MergePDF             PROCEDURE(STRING pInFile1, STRING pInFile2, STRING pInFile3, STRING pInFile4, STRING pOutFile)
+inFiles                         QUEUE(typInPdfFiles).
+  CODE
+  inFiles.name = CLIP(pInFile1); ADD(inFiles)
+  inFiles.name = CLIP(pInFile2); ADD(inFiles)
+  inFiles.name = CLIP(pInFile3); ADD(inFiles)
+  inFiles.name = CLIP(pInFile4); ADD(inFiles)
+  RETURN SELF.MergePDF(inFiles, 1, pOutFile)
+
+TITextCW.MergePDF             PROCEDURE(*QUEUE pInFiles, BYTE pFieldNo, STRING pOutFile)
+szInFiles                       CSTRING(FILE:MaxFilePath), DIM(RECORDS(pInFiles))
+szOutFile                       CSTRING(FILE:MaxFilePath), AUTO
+count                           LONG, AUTO
+qRef                            ANY
+i                               LONG, AUTO
+  CODE
+  LOOP i=1 TO RECORDS(pInFiles)
+    GET(pInFiles, i)
+    qRef &= WHAT(pInFiles, pFieldNo)
+    IF NOT qRef &= NULL
+      szInFiles[i] = CLIP(qRef)
+    ELSE
+      !- invalid field no
+      RETURN FALSE
+    END
   END
+  
+  szOutFile = CLIP(pOutFile)
+  
+  RETURN MergePDFArray(ADDRESS(szInFiles), MAXIMUM(szInFiles, 1), FILE:MaxFilePath, ADDRESS(szOutFile))
+
+TITextCW.SignPDF              PROCEDURE(STRING pInputPDF, STRING pOutputPDF, STRING pCertFile, STRING pCertPassword, TPdfSigAppearanceGrp pAppearance, BOOL pAppend, *STRING pErrMsg)
+szInputPDF                      CSTRING(LEN(CLIP(pInputPDF))+1), AUTO
+szOutputPDF                     CSTRING(LEN(CLIP(pOutputPDF))+1), AUTO
+szCertFile                      CSTRING(LEN(CLIP(pCertFile))+1), AUTO
+szCertPsw                       CSTRING(LEN(CLIP(pCertPassword))+1), AUTO
+grp                             LIKE(_PdfSigAppearanceGrp)
+  CODE
+  CLEAR(pErrMsg)
+  
+  szInputPDF = CLIP(pInputPDF)
+  szOutputPDF = CLIP(pOutputPDF)
+  szCertFile = CLIP(pCertFile)
+  szCertPsw = CLIP(pCertPassword)
   
   grp.SignatureRenderingMode = pAppearance.SignatureRenderingMode
   grp.SignatureCreator = CLIP(pAppearance.SignatureCreator)
@@ -100,26 +132,21 @@ bsErrMsg                        BSTRING
   IF grp.Visible AND grp.PageNum = 0
     grp.PageNum = 1
   END
-  
-  IF SignPDF(LONGPATH(inputPDF), LONGPATH(outputPDF), LONGPATH(certFile), CLIP(certPassword), ADDRESS(grp), pAppend, bsErrMsg)
-    RETURN TRUE
-  ELSE
-    pErrMsg = bsErrMsg
-    RETURN FALSE
-  END
 
-TITextCW.RotatePDF            PROCEDURE(STRING inFile, STRING outFile, LONG pRotation)
-  CODE
-  IF NOT EXISTS(inFile)
-    RETURN FALSE
-  END
-  
-  RETURN RotatePDF(LONGPATH(inFile), LONGPATH(outFile), pRotation)
+  RETURN SignPDF(ADDRESS(szInputPDF), ADDRESS(szOutputPDF), ADDRESS(szCertFile), ADDRESS(szCertPsw), ADDRESS(grp), pAppend, ADDRESS(pErrMsg), SIZE(pErrMsg))
 
-TITextCW.RotatePDF            PROCEDURE(STRING inFile, STRING outFile, LONG pRotation, BOOL pPreferredOrientationIsPortrait)
+TITextCW.RotatePDF            PROCEDURE(STRING pInFile, STRING pOutFile, LONG pRotation)
+szInFile                        CSTRING(LEN(CLIP(pInFile))+1), AUTO
+szOutFile                       CSTRING(LEN(CLIP(pOutFile))+1), AUTO
   CODE
-  IF NOT EXISTS(inFile)
-    RETURN FALSE
-  END
-  
-  RETURN RotatePDFIfNeeded(LONGPATH(inFile), LONGPATH(outFile), pRotation, pPreferredOrientationIsPortrait)
+  szInFile = CLIP(pInFile)
+  szOutFile = CLIP(pOutFile)
+  RETURN RotatePDF(ADDRESS(szInFile), ADDRESS(szOutFile), pRotation)
+
+TITextCW.RotatePDF            PROCEDURE(STRING pInFile, STRING pOutFile, LONG pRotation, BOOL pPreferredOrientationIsPortrait)
+szInFile                        CSTRING(LEN(CLIP(pInFile))+1), AUTO
+szOutFile                       CSTRING(LEN(CLIP(pOutFile))+1), AUTO
+  CODE
+  szInFile = CLIP(pInFile)
+  szOutFile = CLIP(pOutFile)
+  RETURN RotatePDFIfNeeded(ADDRESS(szInFile), ADDRESS(szOutFile), pRotation, pPreferredOrientationIsPortrait)

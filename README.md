@@ -17,7 +17,7 @@ See \examples\PDFMergeTest.clw  for details.
 
 - Include 'iTextCW.inc'.
 - Declare a variable pdfMerge of type TITextCW.
-- Call pdfMerge.MergePDF() method.  
+- Call one of MergePDF methods.  
 
 ### How to sign PDF file
 See \examples\PDFSignTest.clw  for details.
@@ -30,7 +30,7 @@ sap   LIKE(TPdfSigAppearanceGrp)
 ```
 - Declare a string to receive an error message.
 - Set necessary sap fields.
-- Call pdfSign.SignPDF() method, passing input and output pdf file names, PKCS #12 file name, a password, signature appearance group, and append flag.  
+- Call SignPDF method, passing input and output pdf file names, PKCS #12 file name, a password, signature appearance group, and append flag.  
 
 Note: The certificate must be created with exported private key.
 

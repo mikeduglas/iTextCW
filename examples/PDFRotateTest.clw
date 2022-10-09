@@ -20,7 +20,7 @@ outFile                       STRING(255), AUTO
     MESSAGE('Fail!')
   END
 
-  !- 2. Rotate 90 degrees clockwise only those pages which are in landscape orientation
+  !- 2. Rotate only those pages which are in Landscape orientation (in other words preferred orientation is Portrait).
   inFile = '.\pdf\2.pdf'
   outFile = '.\pdf\Rotated 2.pdf'
   IF pdfMerge.RotatePDF(inFile, outFile, 90, TRUE)

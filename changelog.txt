@@ -1,3 +1,10 @@
+v1.0.0.5 09.10.2022
+- MergePDF now accepts a queue of files, allowing you merge any number of files at a time.
+- Internal changes:
+    - BSTRING parameters changed to STRINGs and CSTRINGs.
+    - All MergePDF methods now call single exported function.
+    - Checking file existence is moved to the dll.
+
 v1.0.0.4 07.10.2022
 - added RotatePDF methods.
 

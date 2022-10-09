@@ -3,6 +3,9 @@
   INCLUDE('iTextCW.inc'), ONCE
 
   MAP
+    MODULE('Win API')
+      GetACP(), ULONG, PASCAL, NAME('GetACP')
+    END
     INCLUDE('printf.inc'), ONCE
   END
 
@@ -11,6 +14,8 @@ sap                           LIKE(TPdfSigAppearanceGrp)
 sErrMsg                       STRING(256), AUTO
 
   CODE
+  SYSTEM{PROP:CharSet} = GetACP() !- allow MESSAGE() display non-english error messages.
+  
   sap.SignatureCreator = 'Mike Duglas'
   sap.Reason = 'SignPDF test'
   sap.Contact = 'mikeduglas66@gmail.com'
