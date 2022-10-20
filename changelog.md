@@ -1,3 +1,6 @@
+v1.0.0.6 20.10.2022
+- FIX: Incorrect determination of the total number of pages could lead to a crash.
+
 v1.0.0.5 09.10.2022
 - MergePDF now accepts a queue of files, allowing you merge any number of files at a time.
 - Internal changes:
