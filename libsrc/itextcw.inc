@@ -1,5 +1,5 @@
 !** iTextSharp for Clarion
-!** v1.0.0.5
+!** v1.0.0.6
 !** mikeduglas@yandex.ru 2022
 
 SigRenderingModeEnum          EQUATE(LONG)
