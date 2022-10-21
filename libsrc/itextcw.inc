@@ -30,7 +30,7 @@ TITextCW                      CLASS, TYPE, MODULE('itextcw.clw'), LINK('itextcw.
 MergePDF                        PROCEDURE(STRING pInFile1, STRING pInFile2, STRING pOutFile), BOOL, PROC
 MergePDF                        PROCEDURE(STRING pInFile1, STRING pInFile2, STRING pInFile3, STRING pOutFile), BOOL, PROC
 MergePDF                        PROCEDURE(STRING pInFile1, STRING pInFile2, STRING pInFile3, STRING pInFile4, STRING pOutFile), BOOL, PROC
-MergePDF                        PROCEDURE(*QUEUE pInFiles, BYTE pFieldNo, STRING pOutFile), BOOL, PROC
+MergePDF                        PROCEDURE(*QUEUE pInFiles, BYTE pPdfPathFieldNo, STRING pOutFile), BOOL, PROC  !- pPdfPathFieldNo is an ordinal position of a PDF path field in the queue
 
 SignPDF                         PROCEDURE(STRING pInputPDF, STRING pOutputPDF, STRING pCertFile, STRING pCertPassword, TPdfSigAppearanceGrp pAppearance, BOOL pAppend, *STRING pErrMsg), BOOL
 
