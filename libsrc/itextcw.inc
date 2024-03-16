@@ -1,6 +1,6 @@
 !** iTextSharp for Clarion
-!** v1.0.0.6
-!** mikeduglas@yandex.ru 2022
+!** v1.0.0.7
+!** mikeduglas@yandex.ru 2024
 
 SigRenderingModeEnum          EQUATE(LONG)
 SigRenderingMode::DESCRIPTION EQUATE(0)
@@ -31,6 +31,9 @@ MergePDF                        PROCEDURE(STRING pInFile1, STRING pInFile2, STRI
 MergePDF                        PROCEDURE(STRING pInFile1, STRING pInFile2, STRING pInFile3, STRING pOutFile), BOOL, PROC
 MergePDF                        PROCEDURE(STRING pInFile1, STRING pInFile2, STRING pInFile3, STRING pInFile4, STRING pOutFile), BOOL, PROC
 MergePDF                        PROCEDURE(*QUEUE pInFiles, BYTE pPdfPathFieldNo, STRING pOutFile), BOOL, PROC  !- pPdfPathFieldNo is an ordinal position of a PDF path field in the queue
+
+!!!<summary>MergePDFCallback declaration: MergePDFCallback(BSTRING pFilename, LONG pPageNum, LONG pTotalPages),BYTE,PASCAL; it returns 0 (false) if the page pPageNum must be merged; 1 (true) if it must be skipped.</summary>
+SetMergePDFCallback             PROCEDURE(LONG pCallbackAddress)
 
 SignPDF                         PROCEDURE(STRING pInputPDF, STRING pOutputPDF, STRING pCertFile, STRING pCertPassword, TPdfSigAppearanceGrp pAppearance, BOOL pAppend, *STRING pErrMsg), BOOL
 

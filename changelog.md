@@ -1,3 +1,8 @@
+v1.0.0.7 17.01.2024
+- NEW: SetMergePDFCallback method. The callback is called for every pdf page being processed. If it returns true then the current pdf page is not merged into the output./
+- NEW: PDFMergeArrayTest.clw, PDFMergeCallbackTest.clw examples.
+- FIX: An unhandled exception if input and output files are the same.
+
 v1.0.0.6 20.10.2022
 - FIX: Incorrect determination of the total number of pages could lead to a crash.
 

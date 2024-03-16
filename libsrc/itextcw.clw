@@ -1,6 +1,6 @@
 !** iTextSharp for Clarion
-!** v1.0.0.6
-!** mikeduglas@yandex.ru 2022
+!** v1.0.0.7
+!** mikeduglas@yandex.ru 2024
 
   MEMBER
 
@@ -37,6 +37,7 @@ Visible                         BYTE
   MAP
     MODULE('iTextCW prototypes')
       MergePDFArray(LONG inFiles, LONG pCount, LONG pStrSize, LONG outFile), BYTE, PASCAL, DLL(1), NAME('iTextCW_MergePDFArray')
+      SetMergePDFCallback(LONG cbAddress), PASCAL, DLL(1), NAME('iTextCW_SetMergePDFCallback')
       SignPDF(LONG inputPDF, LONG outputPDF, LONG certFile, LONG certPassword, LONG pAppearance, BYTE pAppend, LONG pErrMsg, LONG pSize), BYTE, PASCAL, DLL(1), NAME('iTextCW_SignPDF')
       RotatePDF(LONG inputPDF, LONG outputPDF, LONG pRotation), BYTE, PASCAL, DLL(1), NAME('iTextCW_RotatePDF')
       RotatePDFIfNeeded(LONG inputPDF, LONG outputPDF, LONG pRotation, BYTE pPreferredOrientationIsPortrait), BYTE, PASCAL, DLL(1), NAME('iTextCW_RotatePDFIfNeeded')
@@ -93,6 +94,10 @@ i                               LONG, AUTO
   szOutFile = CLIP(pOutFile)
   
   RETURN MergePDFArray(ADDRESS(szInFiles), MAXIMUM(szInFiles, 1), FILE:MaxFilePath, ADDRESS(szOutFile))
+
+TITextCW.SetMergePDFCallback  PROCEDURE(LONG pCallbackAddress)
+  CODE
+  SetMergePDFCallback(pCallbackAddress)
 
 TITextCW.SignPDF              PROCEDURE(STRING pInputPDF, STRING pOutputPDF, STRING pCertFile, STRING pCertPassword, TPdfSigAppearanceGrp pAppearance, BOOL pAppend, *STRING pErrMsg)
 szInputPDF                      CSTRING(LEN(CLIP(pInputPDF))+1), AUTO
